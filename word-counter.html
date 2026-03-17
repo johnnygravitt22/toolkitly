@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word & Character Counter — Free Online Tool | Toolkitly</title>
+<meta name="description" content="Count words, characters, sentences, paragraphs, and reading time instantly. Free online word counter with no signup.">
+<link rel="canonical" href="https://toolkitly.netlify.app/word-counter.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:1.5rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:.5rem}
+.subtitle{color:var(--muted);margin-bottom:1.5rem;font-size:.95rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-bottom:1.25rem}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center}
+.stat .num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.stat .label{font-size:.8rem;color:var(--muted);margin-top:.25rem}
+textarea{width:100%;height:280px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;color:var(--text);font-family:inherit;font-size:.95rem;resize:vertical;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--accent)}
+.info{margin-top:2rem;color:var(--muted);font-size:.85rem;line-height:1.6}
+.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.5rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;margin-top:2rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="/">← Back to all tools</a></nav>
+<h1>Word & Character Counter</h1>
+<p class="subtitle">Type or paste text below. Stats update instantly.</p>
+<div class="stats">
+<div class="stat"><div class="num" id="words">0</div><div class="label">Words</div></div>
+<div class="stat"><div class="num" id="chars">0</div><div class="label">Characters</div></div>
+<div class="stat"><div class="num" id="charsNoSpace">0</div><div class="label">No Spaces</div></div>
+<div class="stat"><div class="num" id="sentences">0</div><div class="label">Sentences</div></div>
+<div class="stat"><div class="num" id="paragraphs">0</div><div class="label">Paragraphs</div></div>
+<div class="stat"><div class="num" id="readTime">0m</div><div class="label">Read Time</div></div>
+</div>
+<textarea id="input" placeholder="Start typing or paste your text here..."></textarea>
+<div class="info">
+<h2>How it works</h2>
+<p>This tool counts words, characters (with and without spaces), sentences, and paragraphs in real time. Reading time is estimated at 200 words per minute. Everything runs locally in your browser — your text is never sent anywhere.</p>
+</div>
+<footer>&copy; 2026 <a href="/" style="color:var(--muted)">Toolkitly</a></footer>
+</div>
+<script>
+const input=document.getElementById('input');
+function update(){
+const t=input.value;
+const w=t.trim()?t.trim().split(/\s+/).length:0;
+document.getElementById('words').textContent=w;
+document.getElementById('chars').textContent=t.length;
+document.getElementById('charsNoSpace').textContent=t.replace(/\s/g,'').length;
+document.getElementById('sentences').textContent=t.trim()?(t.match(/[.!?]+(\s|$)/g)||[]).length:0;
+document.getElementById('paragraphs').textContent=t.trim()?t.split(/\n\s*\n/).filter(p=>p.trim()).length:0;
+const m=Math.ceil(w/200);
+document.getElementById('readTime').textContent=m<1?'<1m':m+'m';
+}
+input.addEventListener('input',update);
+</script>
+</body>
+</html>

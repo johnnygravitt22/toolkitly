@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Converter (HEX/RGB/HSL) — Free Online Tool | Toolkitly</title>
+<meta name="description" content="Convert colors between HEX, RGB, and HSL formats with live preview. Free color converter tool, no signup.">
+<link rel="canonical" href="https://toolkitly.netlify.app/color-converter.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:1.5rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:.5rem}
+.subtitle{color:var(--muted);margin-bottom:1.5rem;font-size:.95rem}
+.preview{width:100%;height:120px;border-radius:12px;border:1px solid var(--border);margin-bottom:1.5rem;background:#4f9eff;transition:background .15s}
+.fields{display:flex;flex-direction:column;gap:1rem}
+.field{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;align-items:center;gap:1rem}
+.field label{font-size:.85rem;color:var(--muted);min-width:40px;font-weight:600}
+.field input{flex:1;background:transparent;border:1px solid var(--border);border-radius:6px;padding:.5rem .75rem;color:var(--text);font-family:'SF Mono',Monaco,monospace;font-size:.9rem}
+.field input:focus{outline:none;border-color:var(--accent)}
+.field button{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.5rem .75rem;color:var(--muted);cursor:pointer;font-size:.8rem}
+.field button:hover{border-color:var(--accent);color:var(--text)}
+.picker-wrap{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.picker-wrap input[type=color]{width:50px;height:40px;border:none;border-radius:6px;cursor:pointer;background:none}
+.picker-wrap span{color:var(--muted);font-size:.9rem}
+.info{margin-top:2rem;color:var(--muted);font-size:.85rem;line-height:1.6}
+.info h2{color:var(--text);font-size:1.1rem;margin-bottom:.5rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;margin-top:2rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="/">← Back to all tools</a></nav>
+<h1>Color Converter</h1>
+<p class="subtitle">Enter a color in any format. The others update automatically.</p>
+<div class="picker-wrap"><input type="color" id="picker" value="#4f9eff"><span>Or use the color picker</span></div>
+<div id="preview" class="preview"></div>
+<div class="fields">
+<div class="field"><label>HEX</label><input id="hex" value="#4f9eff" placeholder="#4f9eff"><button onclick="copy('hex')">Copy</button></div>
+<div class="field"><label>RGB</label><input id="rgb" value="rgb(79, 158, 255)" placeholder="rgb(79, 158, 255)"><button onclick="copy('rgb')">Copy</button></div>
+<div class="field"><label>HSL</label><input id="hsl" value="hsl(213, 100%, 65%)" placeholder="hsl(213, 100%, 65%)"><button onclick="copy('hsl')">Copy</button></div>
+</div>
+<div class="info">
+<h2>How to use</h2>
+<p>Enter a color in HEX (e.g. #ff5733), RGB (e.g. rgb(255,87,51)), or HSL (e.g. hsl(11,100%,60%)) format. The other formats and preview update automatically. Use the color picker for visual selection. Click Copy to copy any format.</p>
+</div>
+<footer>&copy; 2026 <a href="/" style="color:var(--muted)">Toolkitly</a></footer>
+</div>
+<script>
+const hexIn=document.getElementById('hex'),rgbIn=document.getElementById('rgb'),hslIn=document.getElementById('hsl'),preview=document.getElementById('preview'),picker=document.getElementById('picker');
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255]}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
+function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;let h,s;if(mx===mn){h=s=0}else{const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);switch(mx){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break}}return[Math.round(h*360),Math.round(s*100),Math.round(l*100)]}
+function hslToRgb(h,s,l){h/=360;s/=100;l/=100;let r,g,b;if(s===0){r=g=b=l}else{const hue2rgb=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p};const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3)}return[Math.round(r*255),Math.round(g*255),Math.round(b*255)]}
+function updateFrom(source){
+let r,g,b;
+try{
+if(source==='hex'){[r,g,b]=hexToRgb(hexIn.value)}
+else if(source==='rgb'){const m=rgbIn.value.match(/(\d+)/g);if(!m||m.length<3)return;[r,g,b]=m.map(Number)}
+else if(source==='hsl'){const m=hslIn.value.match(/(\d+)/g);if(!m||m.length<3)return;[r,g,b]=hslToRgb(...m.map(Number))}
+else if(source==='picker'){[r,g,b]=hexToRgb(picker.value)}
+}catch(e){return}
+if(r==null)return;
+const hex=rgbToHex(r,g,b);const[h,s,l]=rgbToHsl(r,g,b);
+if(source!=='hex')hexIn.value=hex;
+if(source!=='rgb')rgbIn.value=`rgb(${r}, ${g}, ${b})`;
+if(source!=='hsl')hslIn.value=`hsl(${h}, ${s}%, ${l}%)`;
+if(source!=='picker')picker.value=hex;
+preview.style.background=hex;
+}
+hexIn.addEventListener('input',()=>updateFrom('hex'));
+rgbIn.addEventListener('input',()=>updateFrom('rgb'));
+hslIn.addEventListener('input',()=>updateFrom('hsl'));
+picker.addEventListener('input',()=>updateFrom('picker'));
+function copy(id){navigator.clipboard.writeText(document.getElementById(id).value)}
+</script>
+</body>
+</html>
