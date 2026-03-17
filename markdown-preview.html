@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown Preview — Free Online Editor | Toolkitly</title>
+<meta name="description" content="Write and preview Markdown in real-time. Free online Markdown editor with live preview — no signup required.">
+<meta name="keywords" content="markdown preview, markdown editor online, markdown to html, live markdown, markdown renderer">
+<link rel="canonical" href="https://johnnygravitt22.github.io/toolkitly/markdown-preview.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff;--accent-hover:#3a8af0;--success:#4fff8a}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:2rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:1rem}
+.actions{display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
+button{background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;transition:background .2s}
+button:hover{background:var(--accent-hover)}
+button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
+button.secondary:hover{border-color:var(--accent)}
+.editor{display:grid;grid-template-columns:1fr 1fr;gap:1rem;min-height:500px}
+@media(max-width:700px){.editor{grid-template-columns:1fr;min-height:auto}}
+.editor textarea{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:1rem;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.85rem;resize:vertical;min-height:400px}
+.editor textarea:focus{outline:none;border-color:var(--accent)}
+.preview-pane{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;overflow-y:auto;min-height:400px;line-height:1.7;font-size:.95rem}
+.preview-pane h1,.preview-pane h2,.preview-pane h3,.preview-pane h4{margin:1em 0 .5em;font-weight:700}
+.preview-pane h1{font-size:1.6rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+.preview-pane h2{font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+.preview-pane h3{font-size:1.1rem}
+.preview-pane p{margin:.5em 0}
+.preview-pane ul,.preview-pane ol{margin:.5em 0;padding-left:1.5em}
+.preview-pane li{margin:.2em 0}
+.preview-pane code{background:#2a2a2a;padding:.15em .4em;border-radius:4px;font-size:.85em;font-family:'SF Mono',Monaco,Consolas,monospace}
+.preview-pane pre{background:#1e1e1e;border:1px solid var(--border);border-radius:6px;padding:1rem;overflow-x:auto;margin:.75em 0}
+.preview-pane pre code{background:none;padding:0}
+.preview-pane blockquote{border-left:3px solid var(--accent);padding-left:1rem;margin:.75em 0;color:var(--muted)}
+.preview-pane a{color:var(--accent)}
+.preview-pane img{max-width:100%;border-radius:6px}
+.preview-pane hr{border:none;border-top:1px solid var(--border);margin:1em 0}
+.preview-pane table{border-collapse:collapse;width:100%;margin:.75em 0}
+.preview-pane th,.preview-pane td{border:1px solid var(--border);padding:.5rem .75rem;text-align:left}
+.preview-pane th{background:var(--bg)}
+.status{font-size:.85rem;color:var(--success);min-height:1.2em;margin-top:.5rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="index.html">← All Tools</a></nav>
+<h1>Markdown Preview</h1>
+<div class="actions">
+<button class="secondary" onclick="copyHtml()">Copy HTML</button>
+<button class="secondary" onclick="clearEditor()">Clear</button>
+</div>
+<div class="editor">
+<textarea id="input" placeholder="Type Markdown here..."></textarea>
+<div class="preview-pane" id="preview"></div>
+</div>
+<div id="status" class="status"></div>
+</div>
+<footer>&copy; 2026 Toolkitly. All tools run in your browser. Nothing is sent to a server.</footer>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script>
+const inp=document.getElementById('input'),prev=document.getElementById('preview');
+const sample=`# Hello Markdown\n\nThis is a **live preview** editor. Start typing on the left.\n\n## Features\n\n- **Bold**, *italic*, ~~strikethrough~~\n- [Links](https://example.com)\n- Lists (ordered and unordered)\n- \`inline code\` and code blocks\n- Blockquotes and tables\n\n> This is a blockquote.\n\n\`\`\`js\nconst hello = "world";\nconsole.log(hello);\n\`\`\`\n\n| Name | Value |\n|------|-------|\n| Foo  | 42    |\n| Bar  | 99    |`;
+inp.value=sample;
+function render(){try{prev.innerHTML=marked.parse(inp.value)}catch(e){prev.textContent='Parse error: '+e.message}}
+inp.addEventListener('input',render);
+render();
+function copyHtml(){const h=marked.parse(inp.value);navigator.clipboard.writeText(h);msg('HTML copied!')}
+function clearEditor(){inp.value='';prev.innerHTML=''}
+function msg(t){const s=document.getElementById('status');s.textContent=t;setTimeout(()=>s.textContent='',2500)}
+</script>
+</body>
+</html>

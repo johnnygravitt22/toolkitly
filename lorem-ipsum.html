@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorem Ipsum Generator — Free Online Tool | Toolkitly</title>
+<meta name="description" content="Generate lorem ipsum placeholder text. Choose paragraphs, sentences, or words. Free online tool — no signup required.">
+<meta name="keywords" content="lorem ipsum generator, placeholder text, dummy text, lipsum, filler text">
+<link rel="canonical" href="https://johnnygravitt22.github.io/toolkitly/lorem-ipsum.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff;--accent-hover:#3a8af0;--success:#4fff8a}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:2rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:1.5rem}
+.controls{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem}
+select,input[type=number]{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.5rem .75rem;border-radius:6px;font-size:.9rem}
+select:focus,input[type=number]:focus{outline:none;border-color:var(--accent)}
+input[type=number]{width:70px;text-align:center}
+label{font-size:.85rem;color:var(--muted)}
+button{background:var(--accent);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:500;transition:background .2s}
+button:hover{background:var(--accent-hover)}
+button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
+button.secondary:hover{border-color:var(--accent)}
+.options{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap}
+.options label{display:flex;align-items:center;gap:.3rem;cursor:pointer;font-size:.9rem;color:var(--text)}
+.options input[type=checkbox]{accent-color:var(--accent)}
+textarea{width:100%;height:350px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:1rem;font-size:.9rem;line-height:1.7;resize:vertical}
+.status{font-size:.85rem;color:var(--success);min-height:1.2em;margin-top:.5rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="index.html">← All Tools</a></nav>
+<h1>Lorem Ipsum Generator</h1>
+<div class="controls">
+<label>Type:</label>
+<select id="type"><option value="paragraphs">Paragraphs</option><option value="sentences">Sentences</option><option value="words">Words</option></select>
+<label>Count:</label>
+<input type="number" id="count" value="3" min="1" max="100">
+<button onclick="generate()">Generate</button>
+<button class="secondary" onclick="copyText()">Copy</button>
+</div>
+<div class="options">
+<label><input type="checkbox" id="startLorem" checked> Start with "Lorem ipsum..."</label>
+<label><input type="checkbox" id="asHtml"> Wrap in &lt;p&gt; tags</label>
+</div>
+<textarea id="output" readonly></textarea>
+<div id="status" class="status"></div>
+</div>
+<footer>&copy; 2026 Toolkitly. All tools run in your browser. Nothing is sent to a server.</footer>
+<script>
+const WORDS='lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum'.split(' ');
+const FIRST='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+function rw(){return WORDS[Math.floor(Math.random()*WORDS.length)]}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function sentence(){const len=8+Math.floor(Math.random()*12);const w=[];for(let i=0;i<len;i++)w.push(rw());return cap(w.join(' '))+'.'}
+function paragraph(){const n=4+Math.floor(Math.random()*4);const s=[];for(let i=0;i<n;i++)s.push(sentence());return s.join(' ')}
+function generate(){
+const type=document.getElementById('type').value;
+const count=Math.min(100,Math.max(1,parseInt(document.getElementById('count').value)||3));
+const startL=document.getElementById('startLorem').checked;
+const html=document.getElementById('asHtml').checked;
+let parts=[];
+if(type==='words'){const w=[];for(let i=0;i<count;i++)w.push(rw());let t=w.join(' ');if(startL&&count>=5)t='Lorem ipsum dolor sit amet '+w.slice(5).join(' ');parts=[cap(t)+'.']}
+else if(type==='sentences'){for(let i=0;i<count;i++)parts.push(i===0&&startL?FIRST:sentence())}
+else{for(let i=0;i<count;i++)parts.push(i===0&&startL?FIRST+' '+paragraph():paragraph())}
+const sep=type==='sentences'?' ':'\n\n';
+let result=parts.join(sep);
+if(html&&type==='paragraphs')result=parts.map(p=>'<p>'+p+'</p>').join('\n');
+document.getElementById('output').value=result;
+}
+function copyText(){const t=document.getElementById('output').value;if(!t)return;navigator.clipboard.writeText(t);const s=document.getElementById('status');s.textContent='Copied!';setTimeout(()=>s.textContent='',2500)}
+generate();
+</script>
+</body>
+</html>

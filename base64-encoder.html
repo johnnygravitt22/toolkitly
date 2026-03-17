@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Encoder & Decoder — Free Online Tool | Toolkitly</title>
+<meta name="description" content="Encode and decode Base64 strings instantly. Free online Base64 tool — no signup, runs in your browser.">
+<meta name="keywords" content="base64 encoder, base64 decoder, base64 online, encode base64, decode base64">
+<link rel="canonical" href="https://johnnygravitt22.github.io/toolkitly/base64-encoder.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff;--accent-hover:#3a8af0;--error:#ff4f4f;--success:#4fff8a}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:2rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:1.5rem}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:600px){.panels{grid-template-columns:1fr}}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:.4rem;font-weight:600}
+textarea{width:100%;height:200px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:1rem;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.85rem;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+.actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+button{background:var(--accent);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:500;transition:background .2s}
+button:hover{background:var(--accent-hover)}
+button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
+button.secondary:hover{border-color:var(--accent)}
+.status{font-size:.85rem;margin-top:.5rem;min-height:1.2em}
+.status.error{color:var(--error)}
+.status.success{color:var(--success)}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem}
+.info{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-top:2rem;font-size:.9rem;line-height:1.6;color:var(--muted)}
+.info h2{color:var(--text);font-size:1rem;margin-bottom:.5rem}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="index.html">← All Tools</a></nav>
+<h1>Base64 Encoder & Decoder</h1>
+<div class="panels">
+<div>
+<label>Input (Text or Base64)</label>
+<textarea id="input" placeholder="Paste text to encode, or Base64 to decode..."></textarea>
+</div>
+<div>
+<label>Output</label>
+<textarea id="output" readonly placeholder="Result will appear here..."></textarea>
+</div>
+</div>
+<div class="actions">
+<button onclick="encode()">Encode →</button>
+<button onclick="decode()">← Decode</button>
+<button class="secondary" onclick="copyOutput()">Copy Output</button>
+<button class="secondary" onclick="swap()">⇄ Swap</button>
+<button class="secondary" onclick="clearAll()">Clear</button>
+</div>
+<div id="status" class="status"></div>
+
+<div class="info">
+<h2>What is Base64?</h2>
+<p>Base64 is a binary-to-text encoding scheme that represents binary data as ASCII text. It's commonly used to embed images in HTML/CSS, encode email attachments (MIME), transmit data in URLs, and store binary data in JSON or XML. Each Base64 character represents 6 bits of data, so encoded output is roughly 33% larger than the input.</p>
+</div>
+</div>
+<footer>&copy; 2026 Toolkitly. All tools run in your browser. Nothing is sent to a server.</footer>
+<script>
+const inp=document.getElementById('input'),out=document.getElementById('output'),st=document.getElementById('status');
+function encode(){try{out.value=btoa(unescape(encodeURIComponent(inp.value)));msg('Encoded successfully','success')}catch(e){msg('Encoding failed: '+e.message,'error')}}
+function decode(){try{out.value=decodeURIComponent(escape(atob(inp.value.trim())));msg('Decoded successfully','success')}catch(e){msg('Invalid Base64 string','error')}}
+function copyOutput(){if(!out.value)return;navigator.clipboard.writeText(out.value);msg('Copied!','success')}
+function swap(){const t=inp.value;inp.value=out.value;out.value=t}
+function clearAll(){inp.value='';out.value='';st.textContent=''}
+function msg(t,c){st.textContent=t;st.className='status '+c;setTimeout(()=>{st.textContent='';st.className='status'},3000)}
+</script>
+</body>
+</html>

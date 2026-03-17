@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UUID Generator — Free Online Tool | Toolkitly</title>
+<meta name="description" content="Generate random UUIDs (v4) instantly. Bulk generate up to 100 UUIDs. Free online tool — no signup required.">
+<meta name="keywords" content="uuid generator, random uuid, uuid v4, generate uuid online, bulk uuid">
+<link rel="canonical" href="https://johnnygravitt22.github.io/toolkitly/uuid-generator.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--border:#2a2a2a;--text:#e0e0e0;--muted:#888;--accent:#4f9eff;--accent-hover:#3a8af0;--success:#4fff8a}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+nav{margin-bottom:2rem}
+nav a{color:var(--accent);text-decoration:none;font-size:.9rem}
+nav a:hover{text-decoration:underline}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:1.5rem}
+.single{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.single .uuid{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:1.2rem;flex:1;min-width:200px;word-break:break-all}
+.controls{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem}
+button{background:var(--accent);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:500;transition:background .2s}
+button:hover{background:var(--accent-hover)}
+button.secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
+button.secondary:hover{border-color:var(--accent)}
+input[type=number]{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.5rem .75rem;border-radius:6px;width:70px;font-size:.9rem;text-align:center}
+input[type=number]:focus{outline:none;border-color:var(--accent)}
+label{font-size:.85rem;color:var(--muted)}
+textarea{width:100%;height:300px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:1rem;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.85rem;resize:vertical}
+.options{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap}
+.options label{display:flex;align-items:center;gap:.3rem;cursor:pointer;font-size:.9rem;color:var(--text)}
+.options input[type=checkbox]{accent-color:var(--accent)}
+.status{font-size:.85rem;color:var(--success);min-height:1.2em;margin-top:.5rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem}
+.info{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-top:2rem;font-size:.9rem;line-height:1.6;color:var(--muted)}
+.info h2{color:var(--text);font-size:1rem;margin-bottom:.5rem}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="index.html">← All Tools</a></nav>
+<h1>UUID Generator</h1>
+<div class="single">
+<span class="uuid" id="singleUuid">—</span>
+<button onclick="genSingle()">Generate</button>
+<button class="secondary" onclick="copySingle()">Copy</button>
+</div>
+<h2 style="font-size:1.1rem;margin-bottom:1rem">Bulk Generate</h2>
+<div class="controls">
+<label>Count:</label>
+<input type="number" id="count" value="10" min="1" max="100">
+<button onclick="genBulk()">Generate Bulk</button>
+<button class="secondary" onclick="copyBulk()">Copy All</button>
+</div>
+<div class="options">
+<label><input type="checkbox" id="uppercase"> Uppercase</label>
+<label><input type="checkbox" id="noDashes"> No dashes</label>
+</div>
+<textarea id="bulk" readonly placeholder="Bulk UUIDs will appear here..."></textarea>
+<div id="status" class="status"></div>
+
+<div class="info">
+<h2>What is a UUID?</h2>
+<p>A UUID (Universally Unique Identifier) is a 128-bit identifier that's practically guaranteed to be unique. Version 4 UUIDs are randomly generated and follow the format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx. They're used as database primary keys, session tokens, file names, and anywhere you need a unique ID without a central authority.</p>
+</div>
+</div>
+<footer>&copy; 2026 Toolkitly. All tools run in your browser. Nothing is sent to a server.</footer>
+<script>
+function uuid(){return crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:r&0x3|0x8).toString(16)})}
+function fmt(u){const up=document.getElementById('uppercase').checked,nd=document.getElementById('noDashes').checked;if(nd)u=u.replace(/-/g,'');if(up)u=u.toUpperCase();return u}
+function genSingle(){document.getElementById('singleUuid').textContent=fmt(uuid())}
+function copySingle(){const t=document.getElementById('singleUuid').textContent;if(t==='—')return;navigator.clipboard.writeText(t);msg('Copied!')}
+function genBulk(){const n=Math.min(100,Math.max(1,parseInt(document.getElementById('count').value)||10));const a=[];for(let i=0;i<n;i++)a.push(fmt(uuid()));document.getElementById('bulk').value=a.join('\n');msg(n+' UUIDs generated')}
+function copyBulk(){const t=document.getElementById('bulk').value;if(!t)return;navigator.clipboard.writeText(t);msg('Copied all!')}
+function msg(t){const s=document.getElementById('status');s.textContent=t;setTimeout(()=>s.textContent='',2500)}
+genSingle();
+</script>
+</body>
+</html>
